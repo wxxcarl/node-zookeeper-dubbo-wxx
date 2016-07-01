@@ -3,10 +3,6 @@ nodejs connect dubbo by default protocol in zookeeper
 
 ** Extend by [node-zookeeper-dubbo](https://github.com/p412726700/node-zookeeper-dubbo)**
 
-[![NPM version][npm-image]][npm-url]
-[![Downloads][downloads-image]][npm-url]
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/p412726700/node-zookeeper-dubbo/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
 ### config
 ##### env
 dubbo service version
@@ -60,25 +56,3 @@ var arg1={$class:'int',$:123};
 //equivalent
 var arg1=java('int',123);
 ```
-
-### Close zookeeper connection
-
-Default the zookeeper connection is keep-alive,you can call ```service.zoo.close()``` to close the connect;
-
-
-### Contributors
-[PanEW](https://github.com/p412726700)
-
-[zhanghua](https://github.com/zhanghua499)
-
-[caomu](https://github.com/caomu)
-
-[zhchj126](https://github.com/zhchj126)
-
-[maochendong](https://github.com/maochendong)
-
-
-
-[npm-image]:http://img.shields.io/npm/v/node-zookeeper-dubbo.svg?style=flat-square
-[npm-url]:https://npmjs.org/package/node-zookeeper-dubbo?style=flat-square
-[downloads-image]:http://img.shields.io/npm/dm/node-zookeeper-dubbo.svg?style=flat-square
