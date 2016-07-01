@@ -1,7 +1,7 @@
 # node-zookeeper-dubbo
 nodejs connect dubbo by default protocol in zookeeper
 
-** Modified on the basis of [node-zookeeper-dubbo](https://github.com/p412726700/node-zookeeper-dubbo) **
+## Modified on the basis of [node-zookeeper-dubbo](https://github.com/p412726700/node-zookeeper-dubbo) 
 
 ### config
 ##### env
