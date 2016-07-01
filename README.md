@@ -1,5 +1,8 @@
-# node-zookeeper-dubbo
+# node-zookeeper-dubbo-qk
+此项目用于node服务连接zookeeper,通过zookeeper分配的服务器信息，连接java的dubbo服务通过hession协议进行高效的数据通信。
+
 nodejs connect dubbo by default protocol in zookeeper
+
 
 ## Modified on the basis of [node-zookeeper-dubbo](https://github.com/p412726700/node-zookeeper-dubbo) 
 
@@ -15,7 +18,7 @@ dubbo version
 
 ### Example
 ```javascript
-var Service=require('node-zookeeper-dubbo');
+var Service=require('node-zookeeper-dubbo-qk');
 
 var opt={
   env:'test', // dubbo service version
