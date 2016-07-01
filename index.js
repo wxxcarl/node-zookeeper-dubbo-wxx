@@ -1,17 +1,16 @@
 'use strict';
-const net       = require('net');
-const hessian   = require('hessian.js');
-const url       = require('url');
-const zookeeper = require('node-zookeeper-client');
-const qs        = require('querystring');
-const Promise = global.Promise || require('Promise');
+const net         = require('net');
+const hessian     = require('hessian.js');
+const url         = require('url');
+const zookeeper   = require('node-zookeeper-client');
+const qs          = require('querystring');
+const Promise     = global.Promise || require('Promise');
 const DEFAULT_LEN = 8388608; // 8 * 1024 * 1024
 
 var ZK, Service, ERROR;
 
 ERROR={
   '100': 'create buffer failed ',
-  '101': 'connect service faild ',
   '102': 'connect service error ',
   '103': 'not found service ',
   '104': 'method not found ',
@@ -35,7 +34,7 @@ ZK = function(conn, env){
   this.methods = [];
   this.cached  = {};
   this.connect();
-  ZK.instance = this;
+  ZK.instance  = this;
 }
 
 ZK.prototype={
@@ -56,12 +55,8 @@ ZK.prototype={
       _this.client.getChildren('/dubbo/' + path + '/providers', function(err, children){
         var zoo, urlParsed;
         if (err) {
-          if (err.code === -4) {
-            // 101 connect service faild
-            return reject({code:'101', error:ERROR['101']+err.message});
-          }
           // 102 connect service error
-          return reject({code:'102', error:ERROR['102']+(err.message||err)});
+          return reject({code:'102', error:ERROR['102']+(err.name||err)});
         }
         // 103 not found service 
         if (children && !children.length) {
@@ -76,9 +71,9 @@ ZK.prototype={
         }
 
         // get the first zoo
-        urlParsed    = url.parse(Object.keys(zoo)[0]);
+        urlParsed           = url.parse(Object.keys(zoo)[0]);
         _this.methods[path] = zoo.methods.split(',');
-        zoo          = {host: urlParsed.hostname, port: urlParsed.port};
+        zoo                 = {host: urlParsed.hostname, port: urlParsed.port};
         _this.cacheZoo(path, zoo);
         return resolve(zoo)
       });
@@ -102,15 +97,13 @@ Service = function(opt){
   this._env     = opt.env.toUpperCase();
   this._group   = opt.group || '';
   this._conn    = opt.conn;
-  this.zk = new ZK(this._conn, this._env);
+  this.zk       = new ZK(this._conn, this._env);
 }
 
 
 Service.prototype={
   excute:function(method, args){
     var _this = this, buffer;
-
-    // console.log(args);
 
     return new Promise(function(resolve, reject){
       try{
@@ -149,14 +142,14 @@ Service.prototype={
     var _this = this;
 
     return new Promise(function(resolve, reject){
-      var client = new net.Socket();
-      var bl     = 16;
-      var host   = zoo.host;
-      var port   = zoo.port;
-      var ret    = null;
-      var chunks = [];
-      var heap;
+      var client   = new net.Socket();
+      var bl       = 16;
+      var host     = zoo.host;
+      var port     = zoo.port;
+      var ret      = null;
+      var chunks   = [];
       var tryCount = 0;
+      var heap;
 
       // 104 method not found
       if (!~_this.zk.methods[_this._path].indexOf(method)) {
@@ -208,14 +201,13 @@ Service.prototype={
 
       // 105 socket connection error 
       client.on('error', function (err) {
-        console.log('socket error');
         client.destroy();
         return reject({code:'105', error:ERROR['105'] + (err.message || err)});
       });
 
       // 110 socket closed
       client.on('close', function (err){
-        console.log('socket closed');
+        // console.log('socket closed');
         return reject({code:'110', error:ERROR['110']+(err.message || '')});
       });
 
@@ -234,7 +226,7 @@ Service.prototype={
       long   : 'J', double: 'D', float: 'F'
     };
 
-    if (args.length) {
+    if (args && args.length) {
       for (var i = 0, l = args.length; i < l; i++) {
         type = args[i]['$class'];
         types += type && ~type.indexOf('.')
