@@ -149,7 +149,7 @@ Service.prototype={
       var ret      = null;
       var chunks   = [];
       var tryCount = 0;
-      var heap;
+      var heap, ret;
 
       // 104 method not found
       if (!~_this.zk.methods[_this._path].indexOf(method)) {
@@ -161,9 +161,6 @@ Service.prototype={
       });
 
       client.on('data', function (chunk) {
-        var heap, ret;
-
-        client.destroy();
 
         if (!chunks.length) {
           var arr = Array.prototype.slice.call(chunk.slice(0, 16));
@@ -172,10 +169,25 @@ Service.prototype={
             bl += arr.pop() * Math.pow(255, i++);
           }
         }
+
         chunks.push(chunk);
         heap = Buffer.concat(chunks);
+        (heap.length >= bl) && client.destroy();
+      });
 
-        // 106 service response error
+      // 105 socket connection error 
+      client.on('error', function (err) {
+        client.destroy();
+        return reject({code:'105', error:ERROR['105'] + (err.message || err)});
+      });
+
+      // 110 socket closed
+      client.on('close', function (err){
+
+        if (err) {
+          return reject({code:'110', error:ERROR['110']+(err.message || '')});
+        }
+         // 106 service response error
         if (heap[3] !== 20) {
           ret = heap.slice(18, heap.length - 1).toString();
           return reject({code: '106', error:ERROR['106']+ret});
@@ -194,28 +206,16 @@ Service.prototype={
             return reject({code:'108', error:ERROR['108']+(_ret.message||_ret)});//108 hessian read error
           }
           return resolve(_ret);
-        } catch(err) {
-          return reject({code:'109', error:ERROR['109']+(err.message || err)});//109 hessian decoder error
+        } catch(e) {
+          return reject({code:'109', error:ERROR['109']+(e.message || e)});//109 hessian decoder error
         }
-      });
 
-      // 105 socket connection error 
-      client.on('error', function (err) {
-        client.destroy();
-        return reject({code:'105', error:ERROR['105'] + (err.message || err)});
-      });
-
-      // 110 socket closed
-      client.on('close', function (err){
-        // console.log('socket closed');
-        return reject({code:'110', error:ERROR['110']+(err.message || '')});
       });
 
       client.on('timeout',function(){
         client.destroy();
         console.log('socket  timeout');
       })
-
     })
   },
   _createBuffer:function(method, args){
