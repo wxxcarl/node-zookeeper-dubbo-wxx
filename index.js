@@ -24,8 +24,8 @@ ERROR={
 
 /**
  * [ZK get zookeeper info]
- * @param {[string]} conn 
- * @param {[string]} env  
+ * @param {[string]} conn
+ * @param {[string]} env
  */
 ZK = function(conn, env){
   if(ZK.instance) return ZK.instance;
@@ -58,7 +58,7 @@ ZK.prototype={
           // 102 connect service error
           return reject({code:'102', error:ERROR['102']+(err.name||err)});
         }
-        // 103 not found service 
+        // 103 not found service
         if (children && !children.length) {
           return reject({code:'103', error:ERROR['103']+ path});
         }
@@ -175,7 +175,7 @@ Service.prototype={
         (heap.length >= bl) && client.destroy();
       });
 
-      // 105 socket connection error 
+      // 105 socket connection error
       client.on('error', function (err) {
         client.destroy();
         return reject({code:'105', error:ERROR['105'] + (err.message || err)});
@@ -276,7 +276,9 @@ Service.prototype={
       for (var i = 0, len = args.length; i < len; ++i) {
         encoder.write(args[i]);
       }
-    }
+  }else{
+	  encoder.write(0);
+  }
 
     encoder.write({
       $class: 'java.util.HashMap',
