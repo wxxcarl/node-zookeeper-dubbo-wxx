@@ -1,6 +1,6 @@
 {
-  "name": "node-zookeeper-dubbo-qk",
-  "version": "1.0.4",
+  "name": "node-zookeeper-dubbo-wxx",
+  "version": "1.0.1",
   "description": "node connect dubbo by default protocol in zookeeper",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/git-lt/node-zookeeper-dubbo-qk"
+    "url": "https://github.com/git-lt/node-zookeeper-dubbo-wxx"
   },
-  "author": "LT <935486956@qq.com>",
+  "author": "扶苏 <5369248@qq.com>",
   "license": "ISC",
   "dependencies": {
     "hessian.js": "^2.1.8",
