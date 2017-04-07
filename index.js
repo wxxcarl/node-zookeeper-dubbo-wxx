@@ -219,7 +219,7 @@ Service.prototype={
     })
   },
   _createBuffer:function(method, args){
-    var typeRef, types, type, buffer;
+    var typeRef, types, type="", buffer;
 
     typeRef = {
       boolean: 'Z', int: 'I', short: 'S',
@@ -270,15 +270,20 @@ Service.prototype={
     encoder.write(this._path);
     encoder.write(this._env);
     encoder.write(method);
-    encoder.write(type);
 
-    if (args && args.length) {
+	// if (args && args.length) {
+	// 	encoder.write(args.length);
+	// }else{
+		encoder.write(-1);
+	// }
+
+	encoder.write(type);
+
+	if (args && args.length) {
       for (var i = 0, len = args.length; i < len; ++i) {
         encoder.write(args[i]);
       }
-  }else{
-	  encoder.write(0);
-  }
+  	}
 
     encoder.write({
       $class: 'java.util.HashMap',
@@ -290,6 +295,7 @@ Service.prototype={
           timeout  : '60000'
         }
     });
+
 
     encoder = encoder.byteBuffer._bytes.slice(0, encoder.byteBuffer._offset);
 

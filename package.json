@@ -1,6 +1,6 @@
 {
   "name": "node-zookeeper-dubbo-wxx",
-  "version": "1.0.2",
+  "version": "1.0.9",
   "description": "node connect dubbo by default protocol in zookeeper",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/git-lt/node-zookeeper-dubbo-wxx"
+    "url": "https://github.com/wxxcarl/node-zookeeper-dubbo-wxx"
   },
   "author": "扶苏 <5369248@qq.com>",
   "license": "ISC",
